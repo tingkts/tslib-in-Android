@@ -1,0 +1,318 @@
+INPUT MANAGER (dumpsys input)
+
+Input Manager State:
+  Interactive: false
+  System UI Visibility: 0x8008
+  Pointer Speed: 0
+  Pointer Gestures Enabled: true
+  Show Touches: false
+  Pointer Capture Enabled: false
+
+Event Hub State:
+  BuiltInKeyboardId: 2
+  Devices:
+    -1: Virtual
+      Classes: 0x40000023
+      Path: <virtual>
+      Enabled: true
+      Descriptor: a718a782d34bc767f4689c232d64d527998ea7fd
+      Location: 
+      ControllerNumber: 0
+      UniqueId: <virtual>
+      Identifier: bus=0x0000, vendor=0x0000, product=0x0000, version=0x0000
+      KeyLayoutFile: /system/usr/keylayout/Generic.kl
+      KeyCharacterMapFile: /system/usr/keychars/Virtual.kcm
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    1: SEMICCHIP Usb Mouse
+      Classes: 0x80000008
+      Path: /dev/input/event3
+      Enabled: true
+      Descriptor: f4932d42c842c8dcb6d529b89bafe95f5b2f13fb
+      Location: usb-fe380000.usb-1.3/input0
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0003, vendor=0x1a2c, product=0x0042, version=0x0110
+      KeyLayoutFile: 
+      KeyCharacterMapFile: 
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    2: rk29-keypad (aka device 0 - built-in keyboard)
+      Classes: 0x00004001
+      Path: /dev/input/event1
+      Enabled: true
+      Descriptor: 485d69228e24f5e46da1598745890b214130dbc4
+      Location: gpio-keys/input0
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0019, vendor=0x0001, product=0x0001, version=0x0100
+      KeyLayoutFile: /system/usr/keylayout/rk29-keypad.kl
+      KeyCharacterMapFile: /system/usr/keychars/Generic.kcm
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    3: realtek,rt5651-codec Headphones
+      Classes: 0x00000080
+      Path: /dev/input/event0
+      Enabled: true
+      Descriptor: 5f8f709b3a436d6eb1c8b1af9abc7eb3c6477110
+      Location: ALSA
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0000, vendor=0x0000, product=0x0000, version=0x0000
+      KeyLayoutFile: 
+      KeyCharacterMapFile: 
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+    4: Weida Hi-Tech CoolTouch® System
+      Classes: 0x80000014
+      Path: /dev/input/event2
+      Enabled: true
+      Descriptor: fcb503119744c4d512130cd1b7ef1cbfa0a03c5f
+      Location: usb-fe380000.usb-1.2/input0
+      ControllerNumber: 0
+      UniqueId: 
+      Identifier: bus=0x0003, vendor=0x2575, product=0x5130, version=0x0110
+      KeyLayoutFile: 
+      KeyCharacterMapFile: 
+      ConfigurationFile: 
+      HaveKeyboardLayoutOverlay: false
+
+Input Reader State:
+  Device -1: Virtual
+    Descriptor a718a782d34bc767f4689c232d64d527998ea7fd
+    Generation: 2
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x00000301
+    KeyboardType: 2
+    Keyboard Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: false
+        OrientationAware: false
+        HandlesKeyRepeat: false
+      KeyboardType: 2
+      Orientation: 0
+      KeyDowns: 0 keys currently down
+      MetaState: 0x0
+      DownTime: 0
+  Device 0: rk29-keypad
+    Descriptor 485d69228e24f5e46da1598745890b214130dbc4
+    Generation: 8
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x00002103
+    KeyboardType: 1
+    Keyboard Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: false
+        OrientationAware: false
+        HandlesKeyRepeat: false
+      KeyboardType: 1
+      Orientation: 0
+      KeyDowns: 0 keys currently down
+      MetaState: 0x0
+      DownTime: 0
+  Device 1: SEMICCHIP Usb Mouse
+    Descriptor f4932d42c842c8dcb6d529b89bafe95f5b2f13fb
+    Generation: 17
+    IsExternal: true
+    HasMic:     false
+    Sources: 0x00002002
+    KeyboardType: 0
+    Motion Ranges:
+      X: source=0x00002002, min=0.000, max=3839.000, flat=0.000, fuzz=0.000, resolution=0.000
+      Y: source=0x00002002, min=0.000, max=2159.000, flat=0.000, fuzz=0.000, resolution=0.000
+      PRESSURE: source=0x00002002, min=0.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+      VSCROLL: source=0x00002002, min=-1.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+    Cursor Input Mapper:
+      Parameters:
+        HasAssociatedDisplay: true
+        Mode: pointer
+        OrientationAware: false
+      XScale: 1.000
+      YScale: 1.000
+      XPrecision: 1.000
+      YPrecision: 1.000
+      HaveVWheel: true
+      HaveHWheel: false
+      VWheelScale: 1.000
+      HWheelScale: 1.000
+      Orientation: 0
+      ButtonState: 0x00000000
+      Down: false
+      DownTime: 0
+  Device 3: realtek,rt5651-codec Headphones
+    Descriptor 5f8f709b3a436d6eb1c8b1af9abc7eb3c6477110
+    Generation: 6
+    IsExternal: false
+    HasMic:     false
+    Sources: 0x80000000
+    KeyboardType: 0
+    Switch Input Mapper:
+      SwitchValues: 0
+  Device 4: Weida Hi-Tech CoolTouch® System
+    Descriptor fcb503119744c4d512130cd1b7ef1cbfa0a03c5f
+    Generation: 14
+    IsExternal: true
+    HasMic:     false
+    Sources: 0x00001002
+    KeyboardType: 0
+    Motion Ranges:
+      X: source=0x00001002, min=0.000, max=3839.000, flat=0.000, fuzz=0.000, resolution=24.727
+      Y: source=0x00001002, min=0.000, max=2159.000, flat=0.000, fuzz=0.000, resolution=24.587
+      PRESSURE: source=0x00001002, min=0.000, max=1.000, flat=0.000, fuzz=0.000, resolution=0.000
+    Touch Input Mapper (mode - direct):
+      Parameters:
+        GestureMode: multi-touch
+        DeviceType: touchScreen
+        AssociatedDisplay: hasAssociatedDisplay=true, isExternal=true, displayId=''
+        OrientationAware: true
+      Raw Touch Axes:
+        X: min=0, max=32767, flat=0, fuzz=0, resolution=211
+        Y: min=0, max=32767, flat=0, fuzz=0, resolution=373
+        Pressure: unknown range
+        TouchMajor: unknown range
+        TouchMinor: unknown range
+        ToolMajor: unknown range
+        ToolMinor: unknown range
+        Orientation: unknown range
+        Distance: unknown range
+        TiltX: unknown range
+        TiltY: unknown range
+        TrackingId: min=0, max=65535, flat=0, fuzz=0, resolution=0
+        Slot: min=0, max=9, flat=0, fuzz=0, resolution=0
+      Calibration:
+        touch.size.calibration: none
+        touch.pressure.calibration: none
+        touch.orientation.calibration: none
+        touch.distance.calibration: none
+        touch.coverage.calibration: none
+      Affine Transformation:
+        X scale: 0.123
+        X ymix: 0.002
+        X offset: -162.287
+        Y xmix: 0.001
+        Y scale: 0.068
+        Y offset: -71.864
+      Viewport: displayId=0, orientation=0, logicalFrame=[0, 0, 3840, 2160], physicalFrame=[0, 0, 3840, 2160], deviceSize=[3840, 2160]
+      SurfaceWidth: 3840px
+      SurfaceHeight: 2160px
+      SurfaceLeft: 0
+      SurfaceTop: 0
+      PhysicalWidth: 3840px
+      PhysicalHeight: 2160px
+      PhysicalLeft: 0
+      PhysicalTop: 0
+      SurfaceOrientation: 0
+      Translation and Scaling Factors:
+        XTranslate: 0.000
+        YTranslate: 0.000
+        XScale: 0.117
+        YScale: 0.066
+        XPrecision: 8.533
+        YPrecision: 15.170
+        GeometricScale: 0.092
+        PressureScale: 0.000
+        SizeScale: 0.000
+        OrientationScale: 0.000
+        DistanceScale: 0.000
+        HaveTilt: false
+        TiltXCenter: 0.000
+        TiltXScale: 0.000
+        TiltYCenter: 0.000
+        TiltYScale: 0.000
+      Last Raw Button State: 0x00000000
+      Last Raw Touch: pointerCount=0
+      Last Cooked Button State: 0x00000000
+      Last Cooked Touch: pointerCount=0
+      Stylus Fusion:
+        ExternalStylusConnected: false
+        External Stylus ID: -1
+        External Stylus Data Timeout: 9223372036854775807
+      External Stylus State:
+        When: 9223372036854775807
+        Pressure: 0.000000
+        Button State: 0x00000000
+        Tool Type: 0
+  Configuration:
+    ExcludedDeviceNames: []
+    VirtualKeyQuietTime: 0.0ms
+    PointerVelocityControlParameters: scale=1.000, lowThreshold=500.000, highThreshold=3000.000, acceleration=3.000
+    WheelVelocityControlParameters: scale=1.000, lowThreshold=15.000, highThreshold=50.000, acceleration=4.000
+    PointerGesture:
+      Enabled: true
+      QuietInterval: 100.0ms
+      DragMinSwitchSpeed: 50.0px/s
+      TapInterval: 150.0ms
+      TapDragInterval: 300.0ms
+      TapSlop: 20.0px
+      MultitouchSettleInterval: 100.0ms
+      MultitouchMinDistance: 15.0px
+      SwipeTransitionAngleCosine: 0.3
+      SwipeMaxWidthRatio: 0.2
+      MovementSpeedRatio: 0.8
+      ZoomSpeedRatio: 0.3
+      Viewports:
+        ViewportInternal:
+          Viewport: displayId=0, orientation=0, uniqueId='', logicalFrame=[0, 0, 3840, 2160], physicalFrame=[0, 0, 3840, 2160], deviceSize=[3840, 2160]
+        ViewportExternal:
+          Viewport: displayId=0, orientation=0, uniqueId='', logicalFrame=[0, 0, 3840, 2160], physicalFrame=[0, 0, 3840, 2160], deviceSize=[3840, 2160]
+        ViewportVirtual:
+
+Input Dispatcher State:
+  DispatchEnabled: 1
+  DispatchFrozen: 0
+  FocusedApplication: name='AppWindowToken{f287ca0 token=Token{177b1a3 ActivityRecord{98c5cd2 u0 com.android.launcher3/.Launcher t70}}}', dispatchingTimeout=5000.000ms
+  FocusedWindow: name='Window{b306718 u0 StatusBar}'
+  TouchStates: <no displays touched>
+  Windows:
+    0: name='Window{54705a5 u0 NavigationBar}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x21840068, type=0x000007e3, layer=0, frame=[0,2062][3840,2160], scale=1.000000, touchableRegion=[0,2062][3840,2160], inputFeatures=0x00000000, ownerPid=4409, ownerUid=10012, dispatchingTimeout=5000.000ms
+    1: name='Window{b306718 u0 StatusBar}', displayId=0, paused=false, hasFocus=true, hasWallpaper=false, visible=true, canReceiveKeys=true, flags=0x81960040, type=0x000007d0, layer=0, frame=[0,0][3840,2160], scale=1.000000, touchableRegion=[0,0][3840,2160], inputFeatures=0x00000004, ownerPid=4409, ownerUid=10012, dispatchingTimeout=5000.000ms
+    2: name='Window{2ad8c04 u0 AssistPreviewPanel}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x01000118, type=0x000007f1, layer=0, frame=[0,2160][3840,2160], scale=1.000000, touchableRegion=<empty>, inputFeatures=0x00000000, ownerPid=4409, ownerUid=10012, dispatchingTimeout=5000.000ms
+    3: name='Window{c971f28 u0 DockedStackDivider}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x21840028, type=0x000007f2, layer=0, frame=[0,0][0,0], scale=1.000000, touchableRegion=[0,-84][84,84], inputFeatures=0x00000000, ownerPid=4409, ownerUid=10012, dispatchingTimeout=5000.000ms
+    4: name='Window{8d1948 u0 com.android.launcher3/com.android.launcher3.Launcher}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=false, canReceiveKeys=false, flags=0x81910120, type=0x00000001, layer=0, frame=[0,0][3840,2160], scale=1.000000, touchableRegion=[0,0][3840,2160], inputFeatures=0x00000000, ownerPid=4746, ownerUid=10019, dispatchingTimeout=5000.000ms
+    5: name='Window{aaffdee u0 com.android.systemui.ImageWallpaper}', displayId=0, paused=false, hasFocus=false, hasWallpaper=false, visible=true, canReceiveKeys=false, flags=0x00010318, type=0x000007dd, layer=0, frame=[0,0][3840,2560], scale=1.000000, touchableRegion=[0,0][3840,2560], inputFeatures=0x00000000, ownerPid=4409, ownerUid=10012, dispatchingTimeout=5000.000ms
+  MonitoringChannels:
+    0: 'WindowManager (server)'
+  RecentQueue: length=7
+    DeviceResetEvent(deviceId=-1), policyFlags=0x00000000, age=54783.0ms
+    DeviceResetEvent(deviceId=4), policyFlags=0x00000000, age=54783.0ms
+    DeviceResetEvent(deviceId=3), policyFlags=0x00000000, age=54783.0ms
+    DeviceResetEvent(deviceId=0), policyFlags=0x00000000, age=54783.0ms
+    DeviceResetEvent(deviceId=1), policyFlags=0x00000000, age=54783.0ms
+    ConfigurationChangedEvent(), policyFlags=0x00000000, age=54783.0ms
+    DeviceResetEvent(deviceId=4), policyFlags=0x00000000, age=54723.4ms
+  PendingEvent: <none>
+  InboundQueue: <empty>
+  ReplacedKeys: <empty>
+  Connections:
+    0: channelName='WindowManager (server)', windowName='monitor', status=NORMAL, monitor=true, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    1: channelName='c971f28 DockedStackDivider (server)', windowName='Window{c971f28 u0 DockedStackDivider}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    2: channelName='2ad8c04 AssistPreviewPanel (server)', windowName='Window{2ad8c04 u0 AssistPreviewPanel}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    3: channelName='54705a5 NavigationBar (server)', windowName='Window{54705a5 u0 NavigationBar}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    4: channelName='b306718 StatusBar (server)', windowName='Window{b306718 u0 StatusBar}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    5: channelName='pip_input_consumer (server)', windowName='?', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    6: channelName='aaffdee com.android.systemui.ImageWallpaper (server)', windowName='Window{aaffdee u0 com.android.systemui.ImageWallpaper}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+    7: channelName='8d1948 com.android.launcher3/com.android.launcher3.Launcher (server)', windowName='Window{8d1948 u0 com.android.launcher3/com.android.launcher3.Launcher}', status=NORMAL, monitor=false, inputPublisherBlocked=false
+      OutboundQueue: <empty>
+      WaitQueue: <empty>
+  AppSwitch: not pending
+  Configuration:
+    KeyRepeatDelay: 50.0ms
+    KeyRepeatTimeout: 500.0ms
+
+

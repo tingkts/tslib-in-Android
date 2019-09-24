@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<input-manager-state>
+    <input-devices>
+        <input-device descriptor="fcb503119744c4d512130cd1b7ef1cbfa0a03c5f">
+            <calibration format="affine" rotation="0">
+                <x_scale>0.122558594</x_scale>
+                <x_ymix>0.0021362305</x_ymix>
+                <x_offset>-162.28687</x_offset>
+                <y_xmix>0.0010223389</y_xmix>
+                <y_scale>0.06764221</y_scale>
+                <y_offset>-71.86377</y_offset>
+            </calibration>
+        </input-device>
+    </input-devices>
+</input-manager-state>

@@ -1,0 +1,427 @@
+From d708b9046252fc41d74f68602c5bd07b085fcd9c Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Tue, 3 Sep 2019 21:18:45 +0800
+Subject: [PATCH 1/2] porting tslib into android
+
+---
+ Android.mk           | 59 ++++++++++++++++++++++++-------
+ src/ts_load_module.c |  2 +-
+ tests/ts_calibrate.c | 84 ++++++++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 128 insertions(+), 17 deletions(-)
+
+diff --git a/Android.mk b/Android.mk
+index cb8cdc4..af15249 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -3,7 +3,7 @@ LOCAL_MODULE_TAGS := optional
+ 
+ include $(CLEAR_VARS)
+ 
+-TSLIB_PLUGINDIR := /system/lib/ts/plugins
++TSLIB_PLUGINDIR := /system/lib
+ 
+ LOCAL_SRC_FILES := \
+         src/ts_attach.c \
+@@ -23,7 +23,8 @@ LOCAL_SRC_FILES := \
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ LOCAL_CFLAGS := -DTS_CONF=\"/system/etc/ts.conf\"
+-LOCAL_CFLAGS += -DPLUGIN_DIR=\"/system/lib/ts/plugins\"
++LOCAL_CFLAGS += -DPLUGIN_DIR=\"/system/lib\"
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
+ 
+ LOCAL_SHARED_LIBRARIES := libdl
+ 
+@@ -42,10 +43,12 @@ LOCAL_SRC_FILES := plugins/input-raw.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/input
++LOCAL_MODULE := ts.plugins.input
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -60,10 +63,12 @@ LOCAL_SRC_FILES := plugins/pthres.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/pthres
++LOCAL_MODULE := ts.plugins.pthres
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -78,11 +83,12 @@ LOCAL_SRC_FILES := plugins/linear.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ LOCAL_CFLAGS += -DTS_POINTERCAL=\"/system/etc/pointercal\"
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
+ 
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/linear
++LOCAL_MODULE := ts.plugins.linear
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -97,10 +103,12 @@ LOCAL_SRC_FILES := plugins/dejitter.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/dejitter
++LOCAL_MODULE := ts.plugins.dejitter
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -115,10 +123,12 @@ LOCAL_SRC_FILES := plugins/skip.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/skip
++LOCAL_MODULE := ts.plugins.skip
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -133,10 +143,13 @@ LOCAL_SRC_FILES := plugins/debounce.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -Wno-sign-compare
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/debounce
++LOCAL_MODULE := ts.plugins.debounce
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -151,10 +164,12 @@ LOCAL_SRC_FILES := plugins/median.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/median
++LOCAL_MODULE := ts.plugins.median
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -169,10 +184,12 @@ LOCAL_SRC_FILES := plugins/iir.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/iir
++LOCAL_MODULE := ts.plugins.iir
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -187,10 +204,12 @@ LOCAL_SRC_FILES := plugins/lowpass.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/lowpass
++LOCAL_MODULE := ts.plugins.lowpass
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -205,10 +224,12 @@ LOCAL_SRC_FILES := plugins/invert.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+-LOCAL_MODULE := ts/plugins/invert
++LOCAL_MODULE := ts.plugins.invert
+ LOCAL_MODULE_TAGS := optional
+ 
+ include $(BUILD_SHARED_LIBRARY)
+@@ -226,9 +247,11 @@ LOCAL_SRC_FILES :=  tests/testutils.c \
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ LOCAL_CFLAGS := -DTS_POINTERCAL=\"/system/etc/pointercal\"
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
+ 
+ LOCAL_SHARED_LIBRARIES := libdl \
+-                        libts
++                        libts \
++                        libcutils
+ 
+ LOCAL_MODULE := ts_calibrate
+ LOCAL_MODULE_TAGS := optional
+@@ -247,6 +270,8 @@ LOCAL_SRC_FILES := tests/testutils.c \
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+@@ -263,6 +288,8 @@ LOCAL_SRC_FILES := tests/ts_print.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+@@ -280,6 +307,8 @@ LOCAL_SRC_FILES := tests/testutils.c \
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+@@ -296,6 +325,8 @@ LOCAL_SRC_FILES := tests/ts_print_raw.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+@@ -312,6 +343,8 @@ LOCAL_SRC_FILES :=  tools/ts_uinput.c
+ 
+ LOCAL_C_INCLUDES += $(LOCAL_PATH)/src/
+ 
++LOCAL_CFLAGS += -g -ggdb -DDEBUG
++
+ LOCAL_SHARED_LIBRARIES := libdl \
+                         libts
+ 
+diff --git a/src/ts_load_module.c b/src/ts_load_module.c
+index d830436..13af309 100644
+--- a/src/ts_load_module.c
++++ b/src/ts_load_module.c
+@@ -178,7 +178,7 @@ static struct tslib_module_info *__ts_load_module_shared(struct tsdev *ts,
+ 		return NULL;
+ 	}
+ 
+-	snprintf(fn, sizeof(fn), "%s/%s.so", plugin_directory, module);
++	snprintf(fn, sizeof(fn), "%s/ts.plugins.%s.so", plugin_directory, module);
+ 
+ 	handle = dlopen(fn, RTLD_NOW);
+ 	if (!handle) {
+diff --git a/tests/ts_calibrate.c b/tests/ts_calibrate.c
+index 5b540f3..ef205e8 100644
+--- a/tests/ts_calibrate.c
++++ b/tests/ts_calibrate.c
+@@ -25,6 +25,8 @@
+ #include <fcntl.h>
+ #include <getopt.h>
+ #include <errno.h>
++#include <cutils/properties.h>
++#include <sys/system_properties.h>
+ 
+ #include "tslib.h"
+ 
+@@ -47,6 +49,7 @@ static void sig(int sig)
+ 	fflush(stderr);
+ 	printf("signal %d caught\n", sig);
+ 	fflush(stdout);
++	__system_property_set("ctl.start", "zygote");
+ 	exit(1);
+ }
+ 
+@@ -228,6 +231,7 @@ static void clearbuf(struct tsdev *ts)
+ 
+ 		if (ts_read_raw(ts, &sample, 1) < 0) {
+ 			perror("ts_read_raw");
++			__system_property_set("ctl.start", "zygote");
+ 			exit(1);
+ 		}
+ 	}
+@@ -270,6 +274,12 @@ static void help(void)
+ 
+ int main(int argc, char **argv)
+ {
++	printf("stop zygote\n");
++	__system_property_set("ctl.stop", "zygote");
++	printf("sleep 10 ms start\n");
++	usleep(10*1000);
++	printf("sleep 10 ms end\n");
++
+ 	struct tsdev *ts;
+ 	calibration cal = {
+ 		.x = { 0 },
+@@ -286,6 +296,59 @@ int main(int argc, char **argv)
+ 	unsigned int validate_loops = 0;
+ 	short validate_only = 0;
+ 
++	// read /data/system/tscalibrate/active_tsdevice
++	char active_tsdevice_string[1024];
++	char *file_path = "/data/system/tscalibrate/active_tsdevice";
++	FILE *pFile = fopen(file_path, "r" );
++	if (NULL == pFile) {
++		printf("Open %s failure\n", file_path);
++		__system_property_set("ctl.start", "zygote");
++		exit(1);
++	} else{
++		fread(active_tsdevice_string, 1024, 1, pFile);
++		printf("%s\n", active_tsdevice_string);
++	}
++	fclose(pFile);
++
++	// parse active_tsdevice, obtain ts device path, rotation, descriptor
++	printf ("Splitting string \"%s\" into tokens:\n", active_tsdevice_string);
++	char *delim = ",";
++	char * pch, *pPath, *pRotation, *pDescriptor;
++	int count = 0;
++	pch = strtok(active_tsdevice_string, delim);
++	while (pch != NULL) {
++		printf ("token: %s\n", pch);
++		if (count == 0) {
++			pPath = pch;
++		} else if (count == 1) {
++			pRotation = pch;
++		} else if (count == 2) {
++			pDescriptor = pch;
++		}
++		pch = strtok (NULL, delim);
++		count++;
++	}
++	printf ("path: %s\n", pPath);
++	printf ("rotation: %s\n", pRotation);
++	printf ("descriptor: %s\n", pDescriptor);
++
++	char strCalFile[256] = "/data/system/tscalibrate/";
++	strcat(strCalFile, pDescriptor);
++	strcat(strCalFile, "_");
++	strcat(strCalFile, pRotation);
++	printf ("ouput calibration file: %s\n", strCalFile);
++
++	int activeRotation = atoi(pRotation);
++	printf ("active rotation: %d\n", activeRotation);
++
++	// pre-set environment variable
++	setenv("TSLIB_PLUGINDIR", "/system/lib64", /*overwrite*/1);
++	setenv("TSLIB_FBDEVICE", "/dev/graphics/fb0", /*overwrite*/1);
++	setenv("TSLIB_CONSOLEDEVICE", "none", /*overwrite*/1);
++
++	setenv("TSLIB_TSDEVICE", pPath, /*overwrite*/1);
++	setenv("TSLIB_CALIBFILE", strCalFile, /*overwrite*/1);
++
+ 	signal(SIGSEGV, sig);
+ 	signal(SIGINT, sig);
+ 	signal(SIGTERM, sig);
+@@ -320,7 +383,7 @@ int main(int argc, char **argv)
+ 
+ 		case 'r':
+ 			/* extern in fbutils.h */
+-			rotation = atoi(optarg);
++			rotation = /* atoi(optarg) */activeRotation;
+ 			if (rotation < 0 || rotation > 3) {
+ 				help();
+ 				return 0;
+@@ -385,12 +448,14 @@ int main(int argc, char **argv)
+ 	ts = ts_setup(NULL, 0);
+ 	if (!ts) {
+ 		perror("ts_setup");
++		__system_property_set("ctl.start", "zygote");
+ 		exit(1);
+ 	}
+ 
+ 	if (open_framebuffer()) {
+ 		close_framebuffer();
+ 		ts_close(ts);
++		__system_property_set("ctl.start", "zygote");
+ 		exit(1);
+ 	}
+ 
+@@ -490,20 +555,27 @@ redocalibration:
+ 		for (i = 0; i < 7; i++)
+ 			printf("%d ", cal.a[i]);
+ 		printf("\n");
++
+ 		if ((calfile = getenv("TSLIB_CALIBFILE")) != NULL) {
+ 			cal_fd = open(calfile, O_CREAT | O_TRUNC | O_RDWR,
+ 				      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+ 		} else {
+-			cal_fd = open(TS_POINTERCAL, O_CREAT | O_TRUNC | O_RDWR,
+-				      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
++			/* cal_fd = open(TS_POINTERCAL, O_CREAT | O_TRUNC | O_RDWR,
++				      S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH); */
++			cal_fd = -1;
+ 		}
+ 		if (cal_fd < 0) {
+ 			perror("open");
+ 			close_framebuffer();
+ 			ts_close(ts);
++			__system_property_set("ctl.start", "zygote");
+ 			exit(1);
+ 		}
+ 
++		if (chmod(calfile, S_IRWXU|S_IRWXG|S_IRWXO) != 0) {
++			printf("chmod a+wrx fail!\n");
++		}
++
+ 		len = sprintf(cal_buffer, "%d %d %d %d %d %d %d %d %d %d",
+ 			      cal.a[1], cal.a[2], cal.a[0],
+ 			      cal.a[4], cal.a[5], cal.a[3], cal.a[6],
+@@ -512,9 +584,12 @@ redocalibration:
+ 			perror("write");
+ 			close_framebuffer();
+ 			ts_close(ts);
++			__system_property_set("ctl.start", "zygote");
+ 			exit(1);
+ 		}
+ 		close(cal_fd);
++		printf("write calibrate parameters to %s\n", calfile);
++		property_set("persist.vendor.apply.tscalparam", "apply");
+ 		i = 0;
+ 	} else {
+ 		printf("Calibration failed.\n");
+@@ -524,5 +599,8 @@ redocalibration:
+ 	fillrect(0, 0, xres - 1, yres - 1, 0);
+ 	close_framebuffer();
+ 	ts_close(ts);
++
++	printf("Calibration done, start zygote.\n");
++	__system_property_set("ctl.start", "zygote");
+ 	return i;
+ }
+-- 
+2.21.0
+

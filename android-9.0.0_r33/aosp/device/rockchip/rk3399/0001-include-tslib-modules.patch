@@ -1,0 +1,44 @@
+From 98bae99b44b2fefdc5105e854b277da332c7d753 Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Fri, 20 Sep 2019 16:49:49 +0800
+Subject: [PATCH] include tslib modules
+
+---
+ rk3399.mk | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/rk3399.mk b/rk3399.mk
+index 1ab6427..ee9103c 100755
+--- a/rk3399.mk
++++ b/rk3399.mk
+@@ -40,3 +40,26 @@ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.sf.lcd_density=280
+ 
+ #PRODUCT_HAVE_OPTEE := true
++
++
++PRODUCT_PACKAGES += libts \
++    ts.plugins.input \
++    ts.plugins.pthres \
++    ts.plugins.linear \
++    ts.plugins.dejitter \
++    ts.plugins.skip \
++    ts.plugins.debounce \
++    ts.plugins.median \
++    ts.plugins.iir \
++    ts.plugins.lowpass \
++    ts.plugins.invert \
++    ts_calibrate \
++    ts_test_mt \
++    ts_print \
++    ts_print_mt \
++    ts_print_raw \
++    ts_uinput
++
++PRODUCT_PACKAGES += TsCalibrator
++PRODUCT_PACKAGES += logwrapperr
++PRODUCT_COPY_FILES += external/tslib/etc/ts.conf:system/etc/ts.conf
+\ No newline at end of file
+-- 
+2.21.0
+

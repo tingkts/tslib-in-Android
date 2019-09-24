@@ -1,0 +1,121 @@
+From ff2ea9ac409f0f64c653a867e5fe714060c9f740 Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Fri, 6 Sep 2019 21:43:43 +0800
+Subject: [PATCH] sepolicy of ts_calibrate
+
+---
+ sepolicy/vendor/file.te           |  1 +
+ sepolicy/vendor/file_contexts     |  5 +++++
+ sepolicy/vendor/property_contexts |  2 ++
+ sepolicy/vendor/system_app.te     |  7 ++++++-
+ sepolicy/vendor/system_server.te  |  3 +++
+ sepolicy/vendor/tscalibrate.te    | 25 +++++++++++++++++++++++++
+ 6 files changed, 42 insertions(+), 1 deletion(-)
+ create mode 100644 sepolicy/vendor/tscalibrate.te
+
+diff --git a/sepolicy/vendor/file.te b/sepolicy/vendor/file.te
+index 0d473a9..90ce199 100644
+--- a/sepolicy/vendor/file.te
++++ b/sepolicy/vendor/file.te
+@@ -20,6 +20,7 @@ type radio_vendor_data_file, file_type, data_file_type, mlstrustedobject;
+ type sensor_vendor_data_file, file_type, data_file_type, mlstrustedobject;
+ type ramdump_vendor_data_file, file_type, data_file_type, mlstrustedobject;
+ type mediadrm_vendor_data_file, file_type, data_file_type;
++type tscalibrate_data_file, file_type, data_file_type, core_data_file_type;
+ 
+ # /sys
+ type rk_bluetooth_file, sysfs_type, fs_type, mlstrustedobject;
+diff --git a/sepolicy/vendor/file_contexts b/sepolicy/vendor/file_contexts
+index 9745517..ed0f8fc 100644
+--- a/sepolicy/vendor/file_contexts
++++ b/sepolicy/vendor/file_contexts
+@@ -166,3 +166,8 @@
+ #for healthd
+ /sys/devices/virtual/power_supply(/.*)?                              u:object_r:sysfs_power:s0
+ /system/bin/msiServer			u:object_r:msiServer_exec:s0
++
++# for ts_calibrate
++/system/bin/logwrapperr             u:object_r:tscalibrate_exec:s0
++/system/bin/ts_calibrate			u:object_r:tscalibrate_exec:s0
++/data/system/tscalibrate(/.*)?      u:object_r:tscalibrate_data_file:s0
+\ No newline at end of file
+diff --git a/sepolicy/vendor/property_contexts b/sepolicy/vendor/property_contexts
+index c6db014..751c12c 100644
+--- a/sepolicy/vendor/property_contexts
++++ b/sepolicy/vendor/property_contexts
+@@ -62,3 +62,5 @@ vendor.audio                            u:object_r:public_vendor_system_prop:s0
+ 
+ #for vendor/build.prop
+ vendor.all.modules.ready                   u:object_r:public_vendor_system_prop:s0
++
++persist.vendor.apply.tscalparam            u:object_r:public_vendor_system_prop:s0
+diff --git a/sepolicy/vendor/system_app.te b/sepolicy/vendor/system_app.te
+index 2e17db5..1818caa 100644
+--- a/sepolicy/vendor/system_app.te
++++ b/sepolicy/vendor/system_app.te
+@@ -27,7 +27,7 @@ allow system_app self:udp_socket ioctl;
+ 
+ allow system_app vendor_file:file { read open getattr };
+ 
+-#violated by allow 
++#violated by allow
+ #allow system_app apk_data_file:dir { create };
+ 
+ 
+@@ -44,3 +44,8 @@ allow system_app cache_file:dir search;
+ get_prop(system_app,vendor_default_prop)
+ set_prop(system_app,powerctl_prop)
+ set_prop(system_app,debug_prop)
++
++allow system_app tscalibrate_data_file:file create_file_perms;
++allow system_app tscalibrate_data_file:dir create_dir_perms;
++
++allow system_app input_device:dir { read };
+\ No newline at end of file
+diff --git a/sepolicy/vendor/system_server.te b/sepolicy/vendor/system_server.te
+index 0f159cd..5ebc46e 100644
+--- a/sepolicy/vendor/system_server.te
++++ b/sepolicy/vendor/system_server.te
+@@ -30,3 +30,6 @@ set_prop(system_server,public_vendor_system_prop)
+ get_prop(system_server,vendor_hal_wifi_prop)
+ set_prop(system_server,vendor_hal_wifi_prop)
+ #allow system_server vendor_hal_wifi_prop:property_service { read };
++
++allow system_server tscalibrate_data_file:file create_file_perms;
++allow system_server tscalibrate_data_file:dir create_dir_perms;
+\ No newline at end of file
+diff --git a/sepolicy/vendor/tscalibrate.te b/sepolicy/vendor/tscalibrate.te
+new file mode 100644
+index 0000000..4b59cea
+--- /dev/null
++++ b/sepolicy/vendor/tscalibrate.te
+@@ -0,0 +1,25 @@
++type tscalibrate, domain, coredomain, mlstrustedsubject;
++type tscalibrate_exec, exec_type, file_type;
++
++init_daemon_domain(tscalibrate);
++
++file_type_auto_trans(tscalibrate, system_data_file, tscalibrate_data_file);
++
++allow tscalibrate tscalibrate_exec:file { execute_no_trans };
++allow tscalibrate tscalibrate_data_file:file create_file_perms;
++allow tscalibrate tscalibrate_data_file:dir create_dir_perms;
++
++allow tscalibrate input_device:dir { read open search };
++allow tscalibrate input_device:chr_file { read open ioctl write };
++
++allow tscalibrate devpts:chr_file rw_file_perms;
++allow tscalibrate property_socket:sock_file rw_file_perms;
++allow tscalibrate init:unix_stream_socket { connectto };
++allow tscalibrate graphics_device:chr_file { read write open ioctl };
++allow tscalibrate graphics_device:dir { search };
++allow tscalibrate ctl_start_prop:property_service { set };
++allow tscalibrate ctl_stop_prop:property_service { set };
++
++typeattribute tscalibrate system_writes_vendor_properties_violators;
++set_prop(tscalibrate, public_vendor_system_prop)
++get_prop(tscalibrate, public_vendor_system_prop)
+\ No newline at end of file
+-- 
+2.21.0
+

@@ -1,0 +1,142 @@
+From 1b2da84e2c0f13c9a0f3414f493ad9e0e25f0325 Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Thu, 19 Sep 2019 16:30:07 +0800
+Subject: [PATCH 2/2] apply ts_calibrate parameters
+
+---
+ .../server/input/InputManagerService.java     | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+
+diff --git a/services/core/java/com/android/server/input/InputManagerService.java b/services/core/java/com/android/server/input/InputManagerService.java
+index 68e6bff6ff6..e7d25a87b38 100644
+--- a/services/core/java/com/android/server/input/InputManagerService.java
++++ b/services/core/java/com/android/server/input/InputManagerService.java
+@@ -78,6 +78,7 @@ import android.os.MessageQueue;
+ import android.os.Process;
+ import android.os.RemoteException;
+ import android.os.UserHandle;
++import android.os.SystemProperties;
+ import android.provider.Settings;
+ import android.provider.Settings.SettingNotFoundException;
+ import android.text.TextUtils;
+@@ -99,12 +100,14 @@ import android.widget.Toast;
+ 
+ import java.io.File;
+ import java.io.FileDescriptor;
++import java.io.FileInputStream;
+ import java.io.FileNotFoundException;
+ import java.io.FileReader;
+ import java.io.FileWriter;
+ import java.io.IOException;
+ import java.io.InputStreamReader;
+ import java.io.PrintWriter;
++import java.io.BufferedReader;
+ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.HashMap;
+@@ -399,6 +402,8 @@ public class InputManagerService extends IInputManager.Stub
+         if (mWiredAccessoryCallbacks != null) {
+             mWiredAccessoryCallbacks.systemReady();
+         }
++
++        applyTsCalibration();
+     }
+ 
+     private void reloadKeyboardLayouts() {
+@@ -950,6 +955,93 @@ public class InputManagerService extends IInputManager.Stub
+         }
+     }
+ 
++    private void applyTsCalibration() {
++        final String PROP_KEY = "persist.vendor.apply.tscalparam";
++        final String apply = SystemProperties.get(PROP_KEY, "unspecified");
++        Slog.i(TAG, "applyTsCalibration: check " + PROP_KEY + ":" + apply);
++        if (!apply.equals("apply"))
++            return;
++
++        // read active_tsdevice
++        final String FILE_TSDEVICE = "/data/system/tscalibrate/active_tsdevice";
++        String tsdevice_content = null;
++        BufferedReader reader = null;
++        try {
++            reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_TSDEVICE), "UTF-8"));
++            String str = null;
++            while ((str = reader.readLine()) != null) {
++                tsdevice_content = str;
++                Slog.i(TAG, "applyTsCalibration: read " + FILE_TSDEVICE + ":" + tsdevice_content);
++            }
++        } catch (FileNotFoundException e) { e.printStackTrace();
++        } catch (IOException e) { e.printStackTrace();
++        } finally {
++            try { reader.close(); } catch (IOException e) { e.printStackTrace(); }
++        }
++
++        // read ts_calibrate parameters file
++        if (tsdevice_content == null || tsdevice_content.isEmpty())
++            return;
++
++        String[] contents = tsdevice_content.split(",");
++        String descriptor = contents[2];
++        String strRotation = contents[1];
++        int rotation = Integer.parseInt(strRotation);
++        final String FILE_TSCALPARAM = "/data/system/tscalibrate/" + descriptor + "_" + strRotation;
++        Slog.i(TAG, "applyTsCalibration: " + FILE_TSCALPARAM);
++
++        String tscalparam_content = null;
++        try {
++            reader = new BufferedReader(new InputStreamReader(new FileInputStream(FILE_TSCALPARAM), "UTF-8"));
++            String str = null;
++            while ((str = reader.readLine()) != null) {
++                tscalparam_content = str;
++                Slog.i(TAG, "applyTsCalibration: read " + FILE_TSCALPARAM + ":" + tscalparam_content);
++            }
++        } catch (FileNotFoundException e) { e.printStackTrace();
++        } catch (IOException e) { e.printStackTrace();
++        } finally {
++            try { reader.close(); } catch (IOException e) { e.printStackTrace(); }
++        }
++
++        // apply ts_calibrate parameters
++        if (tscalparam_content == null || tscalparam_content.isEmpty())
++            return;
++
++        final int PARAMTER_NUM = 10;
++        contents = tscalparam_content.split(" ");
++        int N = contents.length;
++        if (N != PARAMTER_NUM)
++            return;
++
++        float[] parameters = new float[N];
++        try {
++            for (int i = 0 ;  i < N ; i++) {
++                parameters[i] = Float.parseFloat(contents[i]);
++                Slog.i(TAG, "applyTsCalibration: parameter[" + i + "]=" + parameters[i]);
++            }
++        } catch (NumberFormatException e) {
++            e.printStackTrace();
++            return;
++        }
++
++        float xScale = parameters[0]/parameters[6];
++        float xyMix = parameters[1]/parameters[6];
++        float xOffset = parameters[2]/parameters[6];
++        float yxMix = parameters[3]/parameters[6];
++        float yScale = parameters[4]/parameters[6];
++        float yOffset = parameters[5]/parameters[6];
++        Slog.i(TAG, "applyTsCalibration: xScale=" + xScale + ", xyMix=" + xyMix + ", xOffset=" + xOffset + ", yxMix=" + yxMix + ", yScale=" + yScale + ", yOffset=" + yOffset);
++
++        TouchCalibration setTsCal = new TouchCalibration(xScale, xyMix, xOffset, yxMix, yScale, yOffset);
++        setTouchCalibrationForInputDevice(descriptor, rotation, setTsCal);
++        TouchCalibration getTsCal = getTouchCalibrationForInputDevice(descriptor, rotation);
++        if (setTsCal.equals(getTsCal)) {
++            SystemProperties.set(PROP_KEY, "done");
++            Slog.i(TAG, "applyTsCalibration: confirm " + PROP_KEY + ":" + SystemProperties.get(PROP_KEY));
++        }
++    }
++
+     @Override // Binder call
+     public int isInTabletMode() {
+         if (!checkCallingPermission(android.Manifest.permission.TABLET_MODE,
+-- 
+2.21.0
+

@@ -1,0 +1,24 @@
+From 6707c2fb49a25e4b1dd68e2c1af70f0774953c4a Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Thu, 12 Sep 2019 13:48:51 +0800
+Subject: [PATCH] append descriptor of input device into dump info
+
+---
+ services/inputflinger/InputReader.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/services/inputflinger/InputReader.cpp b/services/inputflinger/InputReader.cpp
+index 0b26d2d35..f20783b89 100644
+--- a/services/inputflinger/InputReader.cpp
++++ b/services/inputflinger/InputReader.cpp
+@@ -1090,6 +1090,7 @@ void InputDevice::dump(std::string& dump) {
+ 
+     dump += StringPrintf(INDENT "Device %d: %s\n", deviceInfo.getId(),
+             deviceInfo.getDisplayName().string());
++    dump += StringPrintf(INDENT2 "Descriptor %s\n", getDescriptor().c_str());
+     dump += StringPrintf(INDENT2 "Generation: %d\n", mGeneration);
+     dump += StringPrintf(INDENT2 "IsExternal: %s\n", toString(mIsExternal));
+     dump += StringPrintf(INDENT2 "HasMic:     %s\n", toString(mHasMic));
+-- 
+2.21.0
+

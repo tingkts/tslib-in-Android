@@ -1,0 +1,35 @@
+From f324a199a52977cd4d20ef405a4cfbea33d97272 Mon Sep 17 00:00:00 2001
+From: tingsung <tingsung@msi.com>
+Date: Fri, 6 Sep 2019 17:27:21 +0800
+Subject: [PATCH] init service, ts_calibrate
+
+---
+ rootdir/init.rc | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index cc12087c2..468176715 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -526,6 +526,8 @@ on post-fs-data
+     mkdir /data/system 0775 system system
+     mkdir /data/system/heapdump 0700 system system
+     mkdir /data/system/users 0775 system system
++    mkdir /data/system/tscalibrate 0777 system system
++    setprop persist.vendor.apply.tscalparam unspecified
+ 
+     mkdir /data/system_de 0770 system system
+     mkdir /data/system_ce 0770 system system
+@@ -763,3 +765,8 @@ on property:ro.debuggable=1
+ service flash_recovery /system/bin/install-recovery.sh
+     class main
+     oneshot
++
++service ts_calibrate /system/bin/logwrapperr /system/bin/ts_calibrate
++    class core
++    oneshot
++    disabled
+\ No newline at end of file
+-- 
+2.21.0
+
